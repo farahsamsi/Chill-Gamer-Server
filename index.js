@@ -4,7 +4,7 @@ const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 5000;
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 // middleware
 app.use(cors());
@@ -38,10 +38,18 @@ async function run() {
       res.send(result);
     });
 
-    // get data for route /coffees
+    // get data for route
     app.get("/gameReviews", async (req, res) => {
       const cursor = gameReviewCollection.find();
       const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    // get operation to find single game reviews
+    app.get("/gameReviews/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await gameReviewCollection.findOne(query);
       res.send(result);
     });
 
