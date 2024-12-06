@@ -53,11 +53,57 @@ async function run() {
       res.send(result);
     });
 
+    // update review "PUT" operation
+    app.put("/gameReviews/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedReview = req.body;
+      const review = {
+        $set: {
+          photo: updatedReview.photo,
+          name: updatedReview.name,
+          year: updatedReview.year,
+          userName: updatedReview.userName,
+          userEmail: updatedReview.userEmail,
+          description: updatedReview.description,
+          rating: updatedReview.rating,
+          genre: updatedReview.genre,
+        },
+      };
+      const result = await gameReviewCollection.updateOne(
+        filter,
+        review,
+        options
+      );
+      res.send(result);
+    });
+
     // delete a game review from received _id
     app.delete("/gameReviews/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await gameReviewCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // ------------------- watchList DB-------------
+    // declaring collection for DB
+    const watchListCollection = client
+      .db("gameReviewDB")
+      .collection("watchList");
+
+    // receive data from client side
+    app.post("/watchList", async (req, res) => {
+      const newWatchListItem = req.body;
+      console.log(newWatchListItem);
+      const result = await watchListCollection.insertOne(newWatchListItem);
+      res.send(result);
+    });
+
+    app.get("/watchList", async (req, res) => {
+      const cursor = watchListCollection.find();
+      const result = await cursor.toArray();
       res.send(result);
     });
 
