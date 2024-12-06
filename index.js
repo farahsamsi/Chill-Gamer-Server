@@ -107,6 +107,22 @@ async function run() {
       res.send(result);
     });
 
+    // get operation to find single item
+    app.get("/watchList/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await watchListCollection.findOne(query);
+      res.send(result);
+    });
+
+    // delete a list item from received _id
+    app.delete("/watchList/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await watchListCollection.deleteOne(query);
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     console.log(
