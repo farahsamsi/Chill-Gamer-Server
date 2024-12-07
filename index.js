@@ -40,9 +40,24 @@ async function run() {
 
     // get data for route
     app.get("/gameReviews", async (req, res) => {
-      const cursor = gameReviewCollection.find().sort({ rating: -1 });
+      const cursor = gameReviewCollection.find();
       const result = await cursor.toArray();
       res.send(result);
+    });
+    // get data for route
+    app.get("/gameReviews/sorted/:sortBy", async (req, res) => {
+      const sortBy = req.params.sortBy;
+      if (sortBy === "rating") {
+        const query = { rating: -1 };
+        const cursor = gameReviewCollection.find().sort(query);
+        const result = await cursor.toArray();
+        res.send(result);
+      } else {
+        const query = { year: -1 };
+        const cursor = gameReviewCollection.find().sort(query);
+        const result = await cursor.toArray();
+        res.send(result);
+      }
     });
 
     // get operation to find single game reviews
