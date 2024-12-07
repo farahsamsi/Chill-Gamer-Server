@@ -40,7 +40,7 @@ async function run() {
 
     // get data for route
     app.get("/gameReviews", async (req, res) => {
-      const cursor = gameReviewCollection.find();
+      const cursor = gameReviewCollection.find().sort({ rating: -1 });
       const result = await cursor.toArray();
       res.send(result);
     });
