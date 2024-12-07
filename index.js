@@ -52,6 +52,13 @@ async function run() {
       const result = await gameReviewCollection.findOne(query);
       res.send(result);
     });
+    // get operation to find email reviews
+    app.get("/gameReviews/email/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { userEmail: email };
+      const result = await gameReviewCollection.find(query).toArray();
+      res.send(result);
+    });
 
     // update review "PUT" operation
     app.put("/gameReviews/:id", async (req, res) => {
@@ -65,7 +72,7 @@ async function run() {
           name: updatedReview.name,
           year: updatedReview.year,
           userName: updatedReview.userName,
-          userEmail: updatedReview.userEmail,
+          username: updatedReview.username,
           description: updatedReview.description,
           rating: updatedReview.rating,
           genre: updatedReview.genre,
