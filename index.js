@@ -52,6 +52,7 @@ async function run() {
       const result = await gameReviewCollection.findOne(query);
       res.send(result);
     });
+
     // get operation to find email reviews
     app.get("/gameReviews/email/:email", async (req, res) => {
       const email = req.params.email;
@@ -119,6 +120,12 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await watchListCollection.findOne(query);
+      res.send(result);
+    });
+    app.get("/watchList/email/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const result = await watchListCollection.find(query).toArray();
       res.send(result);
     });
 
