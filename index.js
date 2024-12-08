@@ -76,6 +76,25 @@ async function run() {
       }
     });
 
+    // Filter and sort combined endpoint
+    app.get("/gameReviews/filter&sort/:genre", async (req, res) => {
+      const { genre } = req.params;
+      const { sort } = req.query;
+
+      let query = { genre }; // Filter by genre
+      let cursor = gameReviewCollection.find(query);
+
+      // Apply sorting if specified
+      if (sort === "rating") {
+        cursor = cursor.sort({ rating: -1 });
+      } else if (sort === "year") {
+        cursor = cursor.sort({ year: -1 });
+      }
+
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     // get operation to find single game reviews
     app.get("/gameReviews/:id", async (req, res) => {
       const id = req.params.id;
