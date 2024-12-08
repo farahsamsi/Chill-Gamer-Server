@@ -44,7 +44,23 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
-    // get data for route
+
+    // get data for top rated with limit 6
+    app.get("/gameReviews/top-rated", async (req, res) => {
+      const cursor = gameReviewCollection.find().sort({ rating: -1 }).limit(6);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+    // filter by category
+    app.get("/gameReviews/filter/:filterGenre", async (req, res) => {
+      const filter = req.params.filterGenre;
+      const query = { genre: filter };
+      const cursor = gameReviewCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    // get data for route based on sorting
     app.get("/gameReviews/sorted/:sortBy", async (req, res) => {
       const sortBy = req.params.sortBy;
       if (sortBy === "rating") {
